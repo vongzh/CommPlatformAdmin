@@ -559,6 +559,14 @@ export const asyncRouterMap = new Map([
 [
   'SchemeList',
   require('@/views/scheme').default
+],
+[
+  'OrderList1',
+  require('@/views/order1/list').default
+],
+[
+  'OrderDetail1',
+  require('@/views/order1/detail').default
 ]
 ])
 

@@ -179,7 +179,6 @@ export default {
       this.$refs[formName].resetFields()
     },
     handleCancel() {
-      this.course = {}
       this.formVisiable = false
       this.handleReset('form')
     },

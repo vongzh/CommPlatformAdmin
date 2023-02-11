@@ -136,7 +136,6 @@ export default {
          this.formVisiable = true
     }, 
     handleReset(formName) {
-      this.role = {}
       this.$refs[formName].resetFields()
     },
     handleCancel() {
