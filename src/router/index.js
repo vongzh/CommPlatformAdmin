@@ -547,7 +547,19 @@ export const asyncRouterMap = new Map([
  [
    'PayLinkList',
    require('@/views/extend/list').default
- ]
+ ],
+
+ /**
+  * 课程
+  */
+ [
+  'CourseList',
+  require('@/views/course').default
+],
+[
+  'SchemeList',
+  require('@/views/scheme').default
+]
 ])
 
 const createRouter = () => new Router({
