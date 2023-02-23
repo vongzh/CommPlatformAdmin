@@ -1,0 +1,550 @@
+<!-- <!doctype html> -->
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width,viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-app-status-bar-style" content="white">
+    <meta name="format-detection" content="telephone=no">
+
+    <meta name="full-screen" content="yes">
+    <meta name="x5-fullscreen" content="true">
+    <meta name="renderer" content="webkit"/>
+
+    <link href="https://cdn.bootcdn.net/ajax/libs/weui/2.5.16/style/weui.min.css" rel="stylesheet">
+
+    <style type="text/css">
+        .weui-form{
+          background: #f0f0f0;
+          padding-top: 0px;
+        }
+        .weui-cells__title{
+          padding: 0 16px !important;
+          margin-top: 10px !important;
+        }
+        .weui-cell_active{
+          font-size: 14px;
+        }
+        .weui-cells__group_form{
+          margin-top: 0px !important;
+        }
+        .colorRed{
+          color:red;
+        }
+        .inline{
+          display: inline;
+        }
+        .page-footer{
+          position: absolute;
+          bottom: 0px;
+          width: 100%;
+        }
+
+        .next-botton{
+          width: 100%;
+          border-radius: 5px;
+        }
+
+        .weui-cells{
+          border-radius: 5px;
+        }
+
+        .mleft-5{
+          margin-left: 5px;
+        }
+
+        .select-right{
+          display: inline-block;
+          margin-right: 35px;
+          color: #cccccc;
+        }
+
+        .select-right-text{
+          width: 50%;
+          text-align: right;
+          margin-right: 35px;
+        }
+
+        .txtRight{
+          text-align: right;;
+        }
+
+        .weui-select-left50{
+          padding-left: 16px !important;
+        }
+
+
+        .colorCCCCCC{
+          color: #cccccc;
+        }
+
+        .display-none{
+          display:none;
+        }
+
+        .txtUrgentContactPersonAddress{
+          padding-left: 0px;
+        }
+
+        .select-left-text{
+          padding-left: 0px;
+          padding-right: 0px;
+        }
+
+        .weui-cells__group_form{
+          overflow: scroll;
+          height: calc(90vh);
+        }
+        
+    </style>
+
+  </head>
+  <body>
+
+    <div class="page">
+        <div class="weui-form">
+          <div class="weui-cells__group weui-cells__group_form">
+            <div class="weui-cells__title">基础信息(必填)</div>
+            <div class="weui-cells">
+              <label class="weui-cell weui-cell_active">
+                <div class="weui-cell__hd">
+                  <span class="weui-label">
+                    <span class="colorRed">*</span>
+                    <span>姓名</span>
+                  </span>
+                </div>
+                <div class="weui-cell__bd">
+                    <input  class="weui-input txtRight" id="txtName" placeholder="请输入您的姓名"/>
+                </div>
+              </label>
+              <label class="weui-cell weui-cell_active">
+                <div class="weui-cell__hd">
+                  <span class="weui-label">
+                    <span class="colorRed">*</span>
+                    <span>手机号码</span>
+                  </span></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input txtRight"  id="txtPhone" placeholder="请输入您的手机号码"  type="number" pattern="[0-9]*" />
+                </div>
+              </label>
+              <label class="weui-cell weui-cell_active">
+                <div class="weui-cell__hd">
+                  <span class="weui-label">
+                    <span class="colorRed">*</span>
+                    <span>QQ</span>
+                  </span></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input txtRight"  id="txtQQ" placeholder="请输入您的QQ"  type="number" pattern="[0-9]*" />
+                </div>
+              </label>
+              <label class="weui-cell weui-cell_active">
+                <div class="weui-cell__hd">
+                  <span class="weui-label">
+                    <span class="colorRed">*</span>
+                    <span>微信</span>
+                  </span>
+                </div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input txtRight" placeholder="请输入您的微信" id="txtWechat" />
+                </div>
+              </label>
+              <label class="weui-cell weui-cell_active">
+                <div class="weui-cell__hd">
+                  <span class="weui-label">
+                    <span class="colorRed">*</span>
+                    <span>邮箱</span>
+                  </span>
+                </div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input txtRight" placeholder="请输入您的邮箱" id = "txtEmail"/>
+                </div>
+              </label>
+              <label class="weui-cell weui-cell_active weui-cell_select weui-select-left50" id="educationPicker">
+                <div class="weui-cell__bd">
+                  <div class="weui-select select-left-text"><span class="colorRed">*</span><span class="mleft-5">最高学历</span></div>
+                </div>
+                <div class="weui-cell__bd"><div class="weui-select txtRight txtEducation colorCCCCCC">请选择</div></div>
+              </label>
+            </div>
+            <div class="weui-cells__title">完善评估信息(选填)</div>
+            <div class="weui-cells">
+              <label class="weui-cell weui-cell_active">
+                <div class="weui-cell__hd">
+                  <span class="weui-label inline">
+                    <span class="colorRed">*</span>
+                    <span>紧急联系人姓名</span>
+                  </span>
+                </div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input txtRight" id="txtUrgentContactPersonName" placeholder="请输入紧急联系人姓名"/>
+                </div>
+              </label>
+              <label class="weui-cell weui-cell_active">
+                <div class="weui-cell__hd">
+                  <span class="weui-label inline">
+                    <span class="colorRed">*</span>
+                    <span>紧急联系人手机号</span>
+                  </span></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input txtRight" id="txtUrgentContactPersonPhone" placeholder="请输入紧急联系人手机号" type="number" pattern="[0-9]*"/>
+                </div>
+              </label>
+            </div>
+            <div class="weui-cells">
+              <div class="weui-cell weui-cell_active weui-cell_select weui-select-left50" id="urgentContactPersonRelationPicker">
+                <div class="weui-cell__bd">
+                  <div class="weui-select select-left-text">紧急联系人关系</div>
+                </div>
+                <div class="weui-cell__bd"><div class="weui-select txtRight txtUrgentContactPersonRelation colorCCCCCC">请选择</div></div>
+              </div>
+              <div class="weui-cell weui-cell_active weui-cell_select weui-select-left50" id="urgentContactPersonAddressPicker" >
+                <div class="weui-cell__bd">
+                  <div class="weui-select select-left-text">紧急联系人居住地址</div>
+                </div>
+                <span class="select-right-text txtUrgentContactPersonAddress colorCCCCCC">请选择</span>
+              </div>
+              <label class="weui-cell weui-cell_active display-none">
+                <div class="weui-cell__hd">
+                  <span class="weui-label">
+                    <span class="colorRed">*</span>
+                    <span>详细地址</span>
+                  </span>
+                </div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input txtRight" placeholder="请输入您的详细地址" id="txtAddress" />
+                </div>
+              </label>
+            </div>
+          </div>
+          <div class="page-footer">
+            <a href="javascript:;" role="button" class="weui-btn weui-btn_primary next-botton" id="nextBtn">下一步</a>
+          </div>
+        </div>
+    </div>
+
+    <div role="alert" id="warnToast" style="display: none;">
+      <div class="weui-mask_transparent"></div>
+      <div class="weui-toast">
+          <i class="weui-icon-warn weui-icon_toast"></i>
+          <p class="weui-toast__content">获取链接失败</p>
+      </div>
+    </div>
+
+  </body>
+
+  <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+  <script src="https://res.wx.qq.com/t/wx_fed/weui.js/res/1.2.17/weui.min.js"></script>
+  <script src="https://cdn.bootcdn.net/ajax/libs/axios/1.3.2/axios.min.js"></script>
+  <script src="distinct.js"></script>
+
+
+  <script>
+
+    var openid = '';
+
+    var appId = 'wx64583fc8eeb8d0ba';
+
+    var code = getUrlCode().code;
+
+    var local = window.location.href;
+    
+
+    if(!code){
+      var url = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid='+appId+'&redirect_uri='+local+'&response_type=code&scope=snsapi_base&m=oauth2#wechat_redirect';
+      window.location.href = url;
+    }else{
+      axios({
+        method: 'get',
+        url: 'http://120.79.132.254:8555/WeChat/GetOpenId&code='+code,
+      }).then(function(data){
+        openid = data.data;
+      }).catch(function(data){
+        console.log('yc:'+data);
+      });
+    }
+    
+
+  var fullAddress = '';
+
+  $(function(){
+
+    var $warnToast = $('#warnToast');
+
+    $('#educationPicker,#urgentContactPersonRelationPicker,#urgentContactPersonAddressPicker').on('click', function () {
+
+      var attrId = $(this).attr('id');
+      var tempArray = [];
+      var titlie = '';
+      var defaultValue = [];
+      if(attrId=='educationPicker'){
+        tempArray = educationArray;
+        titlie = '最高学历';
+        defaultValue = [4];
+      }else if(attrId=='urgentContactPersonRelationPicker'){
+        tempArray = relationPickerArray;
+        titlie = '紧急联系人关系';
+        defaultValue = [4];
+      }else if(attrId=='urgentContactPersonAddressPicker'){
+        tempArray = arr;
+        titlie = '居住地址';
+        defaultValue = [11,1101,110101];
+      }
+        weui.picker(tempArray, {
+            defaultValue:defaultValue,
+            onConfirm: function (result) {
+              console.log(result);
+              if(attrId=='educationPicker'){
+                $('.txtEducation').text(result[0].label);
+                $('.txtEducation').removeClass('colorCCCCCC');
+              }else if(attrId == 'urgentContactPersonRelationPicker'){
+                $('.txtUrgentContactPersonRelation').text(result[0].label);
+                $('.txtUrgentContactPersonRelation').removeClass('colorCCCCCC');
+              }else if(attrId =='urgentContactPersonAddressPicker'){
+                $('.txtUrgentContactPersonAddress').text(result[0].label + result[1].label + result[2].label);
+                fullAddress = result[0].label + '-' + result[1].label + '-' + result[2].label;
+                $('.txtUrgentContactPersonAddress').removeClass('colorCCCCCC');
+                $('.display-none').removeClass('display-none');
+              }
+            },
+            id:attrId,
+            title: titlie
+        });
+    });
+    
+    // $('#urgentContactPersonRelationPicker').on('click', function () {
+    //     weui.picker(relationPickerArray, {
+    //         onConfirm: function (result) {
+    //             console.log(result[0].label);
+    //           $('.txtUrgentContactPersonRelation').text(result[0].label);
+    //           $('.txtUrgentContactPersonRelation').removeClass('colorCCCCCC');
+    //         },
+    //         title: '紧急联系人关系'
+    //     });
+    // });
+
+    // $('#urgentContactPersonAddressPicker').on('click', function () {
+    //     weui.picker(arr, {
+    //       // defaultValue:[11,1101,110101],
+    //       onConfirm: function (result) {
+    //         $('.txtUrgentContactPersonAddress').text(result[0].label + result[1].label + result[2].label);
+    //         fullAddress = result[0].label + '-' + result[1].label + '-' + result[2].label;
+    //         $('.txtUrgentContactPersonAddress').removeClass('colorCCCCCC');
+    //         $('.display-none').removeClass('display-none');
+    //       },
+    //       title: '居住地址'
+    //     });
+    // });
+
+    $('#nextBtn').click(function(){
+        var txtName = $('#txtName').val();
+        if(!txtName){
+          $('.weui-toast__content').text('请输入您的姓名');
+          $warnToast.fadeIn(100);
+          setTimeout(function () {
+              $warnToast.fadeOut(100);
+          }, 1000);
+          return;
+        }
+
+        var txtPhone = $('#txtPhone').val();
+        if(!txtPhone){
+          $('.weui-toast__content').text('请输入您的手机号码');
+          $warnToast.fadeIn(100);
+          setTimeout(function () {
+              $warnToast.fadeOut(100);
+          }, 1000);
+          return;
+        }
+
+        if(!CheckPhone(txtPhone)){
+          $('.weui-toast__content').text('请输入正确的手机号码');
+          $warnToast.fadeIn(100);
+          setTimeout(function () {
+              $warnToast.fadeOut(100);
+          }, 1000);
+          return;
+        }
+
+
+        var txtQQ = $('#txtQQ').val();
+        if(!txtQQ){
+          $('.weui-toast__content').text('请输入您的QQ');
+          $warnToast.fadeIn(100);
+          setTimeout(function () {
+              $warnToast.fadeOut(100);
+          }, 1000);
+          return;
+        }
+
+        if(!CheckQQ(txtQQ)){
+          $('.weui-toast__content').text('请输入正确的QQ');
+          $warnToast.fadeIn(100);
+          setTimeout(function () {
+              $warnToast.fadeOut(100);
+          }, 1000);
+          return;
+        }
+
+        var txtWechat = $('#txtWechat').val();
+        if(!txtWechat){
+          $('.weui-toast__content').text('请输入您的微信');
+          $warnToast.fadeIn(100);
+          setTimeout(function () {
+              $warnToast.fadeOut(100);
+          }, 1000);
+          return;
+        }
+
+        var txtEmail = $('#txtEmail').val();
+        if(!txtEmail){
+          $('.weui-toast__content').text('请输入您的邮箱');
+          $warnToast.fadeIn(100);
+          setTimeout(function () {
+              $warnToast.fadeOut(100);
+          }, 1000);
+          return;
+        }
+
+        if(!CheckEmail(txtEmail)){
+          $('.weui-toast__content').text('请输入正确的邮箱');
+          $warnToast.fadeIn(100);
+          setTimeout(function () {
+              $warnToast.fadeOut(100);
+          }, 1000);
+          return;
+        }
+
+        var txtEducation = $('.txtEducation').text();
+
+        if(!txtEducation || txtEducation=='请选择'){
+          $('.weui-toast__content').text('请选择您的最高学历');
+          $warnToast.fadeIn(100);
+          setTimeout(function () {
+              $warnToast.fadeOut(100);
+          }, 1000);
+          return;
+        }
+
+        var txtUrgentContactPersonName = $('#txtUrgentContactPersonName').val();
+
+        if(!txtUrgentContactPersonName){
+          $('.weui-toast__content').text('请输入紧急联系人姓名');
+          $warnToast.fadeIn(100);
+          setTimeout(function () {
+              $warnToast.fadeOut(100);
+          }, 1000);
+          return;
+        }
+
+        var txtUrgentContactPersonPhone = $('#txtUrgentContactPersonPhone').val();
+
+        if(!txtUrgentContactPersonPhone){
+          $('.weui-toast__content').text('请输入紧急联系人手机号');
+          $warnToast.fadeIn(100);
+          setTimeout(function () {
+              $warnToast.fadeOut(100);
+          }, 1000);
+          return;
+        }
+
+        if(!CheckPhone(txtUrgentContactPersonPhone)){
+          $('.weui-toast__content').text('请输入正确的紧急联系人手机号');
+          $warnToast.fadeIn(100);
+          setTimeout(function () {
+              $warnToast.fadeOut(100);
+          }, 1000);
+          return;
+        }
+
+        var txtUrgentContactPersonRelation = $('.txtUrgentContactPersonRelation').text();
+        if(txtUrgentContactPersonRelation=='请选择') txtUrgentContactPersonRelation = '';
+
+        var txtUrgentContactPersonAddress = $('.txtUrgentContactPersonAddress').text();
+
+        if(txtUrgentContactPersonAddress=='请选择') txtUrgentContactPersonAddress = '';
+
+        if(txtUrgentContactPersonAddress){
+
+          var address = $('#txtAddress').val();
+
+          if(!address){
+            $('.weui-toast__content').text('请输入您的详细地址');
+            $warnToast.fadeIn(100);
+            setTimeout(function () {
+                $warnToast.fadeOut(100);
+            }, 1000);
+            return;
+          }
+          txtUrgentContactPersonAddress = txtUrgentContactPersonAddress + address;
+
+          fullAddress = fullAddress + "-" + address;
+
+        }
+
+
+        var baseInfo = {
+          OpenId:openid,
+          Name : txtName,
+          Phone:txtPhone,
+          QQ : txtQQ,
+          Wechat : txtWechat,
+          Email: txtEmail,
+          Educational : txtEducation,
+          UrgentContactPersonName : txtUrgentContactPersonName,
+          UrgentContactPersonPhone : txtUrgentContactPersonPhone,
+          UrgentContactPersonRelation : txtUrgentContactPersonRelation,
+          UrgentContactPersonAddress : fullAddress
+        };
+        window.sessionStorage.setItem('Signup',JSON.stringify(baseInfo));
+        window.location.href = "index2.html";
+    })
+
+  })
+
+  function CheckPhone (phone) {
+    if (
+      !/^((13[0-9])|(14[5-9])|(15([0-3]|[5-9]))|(16[6-7])|(17[1-8])|(18[0-9])|(19[1|3])|(19[5|6])|(19[8|9]))\d{8}$/.test(
+        phone
+      )
+    ) {
+      return false
+    } else {
+      return true
+    }
+  }
+
+  function CheckEmail (email) {
+    var reg = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    return reg.test(email)
+  }
+
+  function CheckQQ(qq) {
+    var reg = /^[1-9][0-9]{4,9}$/gim;
+    if (reg.test(qq)) {
+        return true;
+    } else {
+        return false;
+    }
+  }
+
+  function getUrlCode(){
+    var url = location.search
+    this.winUrl = url
+    var theRequest = new Object()
+    if (url.indexOf("?") != -1) {
+      var str = url.substr(1)
+      var strs = str.split("&")
+      for (var i = 0; i < strs.length; i++) {
+        theRequest[strs[i].split("=")[0]] = (strs[i].split("=")[1])
+      }
+    }
+    return theRequest;
+  }
+
+
+
+
+  </script>
+</html>

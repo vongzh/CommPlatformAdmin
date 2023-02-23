@@ -1,0 +1,231 @@
+<!-- <!doctype html> -->
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width,viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-app-status-bar-style" content="white">
+    <meta name="format-detection" content="telephone=no">
+
+    <meta name="full-screen" content="yes">
+    <meta name="x5-fullscreen" content="true">
+    <meta name="renderer" content="webkit"/>
+
+    
+    <link href="https://cdn.bootcdn.net/ajax/libs/weui/2.5.16/style/weui.min.css" rel="stylesheet">
+
+    <style type="text/css">
+       
+
+      .header{
+        height: 200px;
+        background-color: #5480E9;
+        border-bottom-left-radius: 30px;
+        border-bottom-right-radius: 30px;
+      }
+
+
+      .content-item{
+        padding: 10px;
+        border-radius: 8px;
+        border-bottom: 1px solid #ccc;
+        padding-bottom: 10px;
+        background: #ffffff;
+        margin-bottom: 20px;
+      }
+      .content-item-1{
+        border-bottom: 1px solid #e3e3e3;
+        padding-bottom: 10px;
+      }
+      .content-item-2{
+        padding: 10px 0px;
+      }
+
+      .btn{
+        border: 1px solid #ccc;
+        padding: 4px 15px;
+        border-radius: 30px;
+        font-size: 12px;
+        color: #fff;
+        background: #5480E9;
+        font-weight: bold;
+      }
+
+      .pay-time{
+        font-size: 12px;
+        text-align: right;
+        color:#5B8BC5;
+      }
+
+      .weui-form{
+        background: #f0f0f0;
+      }
+
+      .page__bd_spacing{
+        padding: 15px;
+      }
+
+      .fuhao{
+        font-size: 14px;
+      }
+
+      .price{
+        font-size: 25px;
+      }
+
+      .service-price{
+        font-size: 12px;
+        color: #9b9898;
+        margin-top: 5px;
+      }
+
+      .right-checkbox{
+        text-align: right;
+        position: absolute;
+        right: 0px;
+      }
+
+      .btn1{
+        text-align: center;
+        background: #C9D8F9;
+        border-radius: 10px;
+        height: 38px;
+        line-height: 38px;
+        margin: 0px 15px;
+        color: #5B8BC5; 
+      }
+
+      .btn2{
+        text-align: center;
+        background: #3A7FDE;
+        border-radius: 10px;
+        height: 38px;
+        line-height: 38px;
+        margin: 0px 15px;
+        color: #fff;
+      }
+
+
+      .fd{
+        position: absolute;
+        bottom: 0px;
+        margin-bottom: 15px;
+        width: 100%;
+        left: 0;
+      }
+
+      .page{
+        position: relative;
+      }
+
+      .youhui{
+        font-size: 10px;
+        background: #3A80E1;
+        padding: 1px 6px;
+        border-radius: 3px;
+        color: #fff;
+      }
+
+      .header{
+        text-align: center;
+        color: #fff;
+        font-size: 13px;
+      }
+      .p1{
+        padding-top: 40px;
+        opacity: 0.7;
+      }
+      .p2{
+        font-size: 28px;
+        padding-top: 10px;
+      }
+      .p3{
+        font-size: 10px;
+        border: 1px solid #fff;
+        margin: 0px 15%;
+        border-radius: 20px;
+        margin-top: 10px;
+        padding: 5px 0px;
+        opacity: 0.6;
+      }
+
+
+    </style>
+
+  </head>
+  <body>
+
+
+    <div class="page">
+      <div class="weui-form">
+        <div class="page__hd">
+          <div class="header">
+              <p class="p1">剩余支付金额（元）</p>
+              <p class="p2">￥566.44</p>
+              <div class="p3">请最晚在支付日当天中午12点前主动支付</div>
+          </div>
+        </div>
+        <div class="page__bd page__bd_spacing">
+          <div class="content-item">
+            <div class="weui-flex content-item-1">
+                <div class="placeholder"><span class="btn">1/15期</span></div>
+                <div class="weui-flex__item">
+                  <div class="placeholder pay-time">
+                      应付时间：2023-03-29 23:59:59
+                  </div>
+                </div>
+            </div>
+
+            <div class="weui-flex content-item-2">
+              <div class="weui-flex__item">
+                <span class="fuhao">￥</span>
+                <span class="price">375.25</span>
+                
+                <p class="service-price">
+                  <span>学费：350.00</span>
+                  <span>服务费：2625</span>
+                </p>
+
+              </div>
+              <div class="weui-flex__item">
+
+                <label class="weui-cell weui-cells_checkbox weui-cell_active weui-check__label right-checkbox" for="s12">
+                  <div class="weui-cell__hd">
+                      <input type="checkbox" name="checkbox1" class="weui-check" id="s12"/>
+                      <i class="weui-icon-checked"></i>
+                  </div>
+                </label>
+
+              </div>
+            </div>
+          </div>
+
+          <div class="weui-flex fd">
+
+            <div class="weui-flex__item btn1">
+              <span>一次性付清</span>
+              <span class="youhui">优惠</span>
+            </div>
+
+            <div class="weui-flex__item btn2">
+              支付所选
+            </div>
+            
+          </div>
+      </div>
+    </div>
+    
+  </body>
+
+  
+  <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+  <script src="https://cdn.bootcdn.net/ajax/libs/axios/1.3.2/axios.min.js"></script>
+
+  <script>
+
+    
+  </script>
+
+</html>
