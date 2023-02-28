@@ -257,7 +257,7 @@
     }else{
       axios({
         method: 'get',
-        url: 'http://120.79.132.254:8555/WeChat/GetOpenId&code='+code,
+        url: 'http://120.79.132.254:8555/WeChat/GetOpenId?code='+code,
       }).then(function(data){
         openid = data.data;
       }).catch(function(data){
@@ -312,32 +312,18 @@
             title: titlie
         });
     });
-    
-    // $('#urgentContactPersonRelationPicker').on('click', function () {
-    //     weui.picker(relationPickerArray, {
-    //         onConfirm: function (result) {
-    //             console.log(result[0].label);
-    //           $('.txtUrgentContactPersonRelation').text(result[0].label);
-    //           $('.txtUrgentContactPersonRelation').removeClass('colorCCCCCC');
-    //         },
-    //         title: '紧急联系人关系'
-    //     });
-    // });
-
-    // $('#urgentContactPersonAddressPicker').on('click', function () {
-    //     weui.picker(arr, {
-    //       // defaultValue:[11,1101,110101],
-    //       onConfirm: function (result) {
-    //         $('.txtUrgentContactPersonAddress').text(result[0].label + result[1].label + result[2].label);
-    //         fullAddress = result[0].label + '-' + result[1].label + '-' + result[2].label;
-    //         $('.txtUrgentContactPersonAddress').removeClass('colorCCCCCC');
-    //         $('.display-none').removeClass('display-none');
-    //       },
-    //       title: '居住地址'
-    //     });
-    // });
 
     $('#nextBtn').click(function(){
+
+        if(!openid){
+          $('.weui-toast__content').text('未授权');
+            $warnToast.fadeIn(100);
+            setTimeout(function () {
+                $warnToast.fadeOut(100);
+            }, 1000);
+            return;
+        }
+
         var txtName = $('#txtName').val();
         if(!txtName){
           $('.weui-toast__content').text('请输入您的姓名');
@@ -480,7 +466,6 @@
           txtUrgentContactPersonAddress = txtUrgentContactPersonAddress + address;
 
           fullAddress = fullAddress + "-" + address;
-
         }
 
 
