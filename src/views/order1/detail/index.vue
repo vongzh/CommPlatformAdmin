@@ -21,21 +21,9 @@
                             <el-col :span="12" class="right-align">
                                 <span class="orderinfo">订单生成时间：</span>
                             </el-col>
-                            <el-col :span="12" class="left-align">{{ Order.orderNo }}</el-col>
+                            <el-col :span="12" class="left-align">{{ Order.createTime }}</el-col>
                         </el-row>
                     </el-col>
-                    <el-col :span="8" />
-                </el-row>
-                <el-row class="orderinfoline">
-                    <el-col :span="8" class="orderinfocol">
-                        <el-row>
-                            <el-col :span="12" class="right-align">
-                                <span class="orderinfo">支付方案：</span>
-                            </el-col>
-                            <el-col :span="12" class="left-align">{{ Order.schemeName }}</el-col>
-                        </el-row>
-                    </el-col>
-                    <el-col :span="8" />
                     <el-col :span="8" />
                 </el-row>
             </el-card>
@@ -58,10 +46,45 @@
                             <el-col :span="12" class="right-align">
                                 <span class="orderinfo">手机号：</span>
                             </el-col>
-                            <el-col :span="12" class="left-align">{{ Order.orderNo }}</el-col>
+                            <el-col :span="12" class="left-align">{{ signUp.phone }}</el-col>
                         </el-row>
                     </el-col>
-                    <el-col :span="8" />
+                </el-row>
+                <el-row class="orderinfoline">
+                    <el-col :span="8" class="orderinfocol">
+                        <el-row>
+                            <el-col :span="12" class="right-align">
+                                <span class="orderinfo">微信：</span>
+                            </el-col>
+                            <el-col :span="12" class="left-align">{{ signUp.wechat }}</el-col>
+                        </el-row>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-row>
+                            <el-col :span="12" class="right-align">
+                                <span class="orderinfo">QQ：</span>
+                            </el-col>
+                            <el-col :span="12" class="left-align">{{ signUp.qq }}</el-col>
+                        </el-row>
+                    </el-col>
+                </el-row>
+                <el-row class="orderinfoline">
+                    <el-col :span="8" class="orderinfocol">
+                        <el-row>
+                            <el-col :span="12" class="right-align">
+                                <span class="orderinfo">邮箱：</span>
+                            </el-col>
+                            <el-col :span="12" class="left-align">{{ signUp.email }}</el-col>
+                        </el-row>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-row>
+                            <el-col :span="12" class="right-align">
+                                <span class="orderinfo">学历：</span>
+                            </el-col>
+                            <el-col :span="12" class="left-align">{{ signUp.educational }}</el-col>
+                        </el-row>
+                    </el-col>
                 </el-row>
             </el-card>
             <el-card class="info" shadow="never">
@@ -106,6 +129,32 @@
                 </div>
                 <el-row class="orderinfoline">
                     <div class="content">
+                        <el-row class="orderinfoline">
+                            <el-col :span="8">
+                                <el-row>
+                                    <el-col :span="12" class="right-align">
+                                        <span class="orderinfo">支付方案：</span>
+                                    </el-col>
+                                    <el-col :span="12" class="left-align">{{ Order.schemeName }}</el-col>
+                                </el-row>
+                            </el-col>
+                            <el-col :span="8" class="orderinfocol">
+                                <el-row>
+                                    <el-col :span="12" class="right-align">
+                                        <span class="orderinfo">期数：</span>
+                                    </el-col>
+                                    <el-col :span="12" class="left-align">{{ Order.schemeNum }}</el-col>
+                                </el-row>
+                            </el-col>
+                            <el-col :span="8" class="orderinfocol">
+                                <el-row>
+                                    <el-col :span="12" class="right-align">
+                                        <span class="orderinfo">服务费：</span>
+                                    </el-col>
+                                    <el-col :span="12" class="left-align">{{ Order.serviceRate }}%</el-col>
+                                </el-row>
+                            </el-col>
+                        </el-row>
                         <div class="table">
                             <el-table v-loading="tableLoading" :data="paymentOrders" :fit="true" border
                                 highlight-current-row>
@@ -113,24 +162,25 @@
                                 <el-table-column prop="classAmount" label="学费">
                                     <template slot-scope="scope">
                                         <div class="table-opt">
-                                            {{ scope.row.classAmount / 100 }}
+                                            {{ scope.row.classAmount / 100 }}元
                                         </div>
                                     </template>
                                 </el-table-column>
                                 <el-table-column prop="serviceAmount" label="服务费">
                                     <template slot-scope="scope">
                                         <div class="table-opt">
-                                            {{ scope.row.serviceAmount / 100 }}
+                                            {{ scope.row.serviceAmount / 100 }}元
                                         </div>
                                     </template>
                                 </el-table-column>
-                                <el-table-column prop="paymentStatus" label="支付状态" >
+                                <el-table-column prop="paymentStatus" label="支付状态">
                                     <template slot-scope="scope">
                                         <div class="table-opt">
-                                            <el-tag> {{ scope.row.paymentStatus===5?'已支付':'待支付' }}</el-tag>   
+                                            <el-tag> {{ scope.row.paymentStatus === 5 ? '已支付' : '待支付' }}</el-tag>
                                         </div>
                                     </template>
                                 </el-table-column>
+                                <el-table-column prop="payableTime" label="应付时间" />
                                 <el-table-column prop="paymentTime" label="支付时间" />
                             </el-table>
                         </div>
@@ -144,7 +194,8 @@
 <script>
 import {
     GetOrder,
-    GetPaymentOrders
+    GetPaymentOrders,
+    GetSignup
 } from '@/api/order1'
 import moment from 'moment'
 import permission from '@/directive/permission'
@@ -170,6 +221,7 @@ export default {
     data() {
         return {
             Order: {},
+            signUp: {},
             paymentOrders: []
         }
     },
@@ -229,6 +281,7 @@ export default {
                 }
                 this.Order = res.data
 
+                this.fetchSignup();
                 this.fetchPaymentOrders();
 
                 loading.close()
@@ -238,6 +291,12 @@ export default {
             GetPaymentOrders(this.Order.orderNo, this.Order.openId)
                 .then(res => {
                     this.paymentOrders = res.data
+                })
+        },
+        fetchSignup() {
+            GetSignup(this.Order.userId)
+                .then(res => {
+                    this.signUp = res.data
                 })
         }
     }

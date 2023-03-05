@@ -18,6 +18,16 @@ export function GetOrder(orderNo) {
     })
 }
 
+export function GetSignup(userId) {
+    return request({
+        url: 'Signup/Get',
+        method: 'post',
+        params: {
+            userId
+        }
+    })
+}
+
 export function GetPaymentOrders(orderNo, openId ) {
     return request({
         url: '/Payment/GetPaymentOrders',

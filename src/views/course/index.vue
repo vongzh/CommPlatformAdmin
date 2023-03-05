@@ -30,8 +30,16 @@
         <div class="table">
           <el-table v-loading="tableLoading" :data="courseList" :fit="true" border highlight-current-row>
             <el-table-column prop="courseName" label="课程名称" />
-            <el-table-column prop="duration" label="课程周期(天)" />
-            <el-table-column prop="price" label="价格(分)" />
+            <el-table-column prop="duration" label="课程周期(天)">
+              <template slot-scope="scope">
+                        {{ scope.row.duration }} 天
+              </template>
+            </el-table-column>
+            <el-table-column prop="price" label="价格(元)" >
+              <template slot-scope="scope">
+                        {{ scope.row.price / 100 }} 元
+              </template>
+            </el-table-column>
             <el-table-column prop="isDelete" label="状态">
                 <template slot-scope="scope">
                     <el-tag :type="scope.row.isDelete === 1?'danger':'success'">

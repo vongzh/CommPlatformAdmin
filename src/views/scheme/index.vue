@@ -11,7 +11,11 @@
         <div class="table">
           <el-table v-loading="tableLoading" :data="schemeList" :fit="true" border highlight-current-row>
             <el-table-column prop="schemeName" label="方案名称" />
-            <el-table-column prop="serviceRate" label="服务费比例" />
+            <el-table-column prop="serviceRate" label="服务费比例" >
+              <template slot-scope="scope">
+                        {{ scope.row.serviceRate }}%
+              </template>
+            </el-table-column>
             <el-table-column prop="totalNumber" label="期数" />
             <el-table-column prop="isDelete" label="状态">
                 <template slot-scope="scope">
