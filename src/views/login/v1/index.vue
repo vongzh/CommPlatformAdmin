@@ -76,17 +76,18 @@
 
         </el-row>
         <el-row class="content-btn-login">
-          <el-col>
+          <!-- <el-col>
             <el-link style="color:#006699;margin-bottom:50px;margin-top:20px" class="float-right" @click="goForgetPwd()">忘记密码?</el-link>
-          </el-col>
+          </el-col> -->
           <el-col>
             <el-button
               :loading="loading"
               type="primary"
               class="submit-button"
+              style="margin-top:20px"
               @click.native.prevent="handleLogin"
             >登录</el-button>
-            <span style="border-bottom:1px solid #A5A5A4;margin-left:30px;color:#A5A5A4;font-size:14px">还没有账号?去<span style="color:#006699;cursor:pointer" @click="goRegister()">注册</span></span>
+            <!-- <span style="border-bottom:1px solid #A5A5A4;margin-left:30px;color:#A5A5A4;font-size:14px">还没有账号?去<span style="color:#006699;cursor:pointer" @click="goRegister()">注册</span></span> -->
           </el-col>
         </el-row>
       </el-form>
@@ -118,7 +119,7 @@
 </template>
 
 <script>
-import bg from '@/assets/custom-theme/imgs/bg.png'
+import bg from '@/assets/custom-theme/imgs/bg.jpg'
 import logo from '@/assets/custom-theme/imgs/logo.png'
 
 export default {
@@ -260,7 +261,7 @@ export default {
       document.head.appendChild(script)
     },
     wechatQRCode() {
-      const rurl = encodeURIComponent('https://www.51zhu.cn/wechat/redirect')
+      const rurl = encodeURIComponent('')
       new WxLogin({
         self_redirect: true,
         id: 'wechatloginqr',

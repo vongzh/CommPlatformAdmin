@@ -1,5 +1,5 @@
 module.exports = {
-  title: '酒店预订平台',
+  title: '后台系统',
 
   /**
    * @type {boolean} true | false

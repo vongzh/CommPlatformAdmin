@@ -1,169 +1,387 @@
 <template>
-    <div class="app-container">
-        <el-collapse value="search">
-            <el-collapse-item name="search">
-                <span slot="title" class="collapse-title">订单列表</span>
-                <div class="filter-container">
-                    <el-card>
-                        <el-form ref="searchForm" :inline="true" :model="searchCondition" label-position="top">
-                            <el-form-item label="订单号" prop="orderNo">
-                                <el-input v-model="searchCondition.orderNo" clearable placeholder="订单号"
-                                    class="filter-item input-search" />
-                            </el-form-item>
-                        </el-form>
-                        <div class="tools-btn">
-                            <el-button v-waves class="filter-item" type="primary" size="small" icon="el-icon-search"
-                                @click="handleSearch('search')">搜索</el-button>
-                            <el-button v-waves class="filter-item" type="warning" size="small" icon="el-icon-close"
-                                @click="handleReset('searchForm')">重置</el-button>
+    <div class="content">
+        <el-col :xl="4" :lg="2"><br></el-col>
+        <el-col :xl="16" :lg="20">
+            <el-card class="info" shadow="never">
+                <div slot="header" class="info-header">
+                    <svg-icon icon-class="dingdan_1" />
+                    <span type="primary" class="titlecss">订单详情</span>
+                </div>
+                <el-row class="orderinfoline">
+                    <el-col :span="8" class="orderinfocol">
+                        <el-row>
+                            <el-col :span="12" class="right-align">
+                                <span class="orderinfo">订单编号：</span>
+                            </el-col>
+                            <el-col :span="12" class="left-align">{{ Order.orderNo }}</el-col>
+                        </el-row>
+                    </el-col>
+                    <el-col :span="8" class="orderinfocol">
+                        <el-row>
+                            <el-col :span="12" class="right-align">
+                                <span class="orderinfo">订单生成时间：</span>
+                            </el-col>
+                            <el-col :span="12" class="left-align">{{ Order.orderNo }}</el-col>
+                        </el-row>
+                    </el-col>
+                    <el-col :span="8" />
+                </el-row>
+                <el-row class="orderinfoline">
+                    <el-col :span="8" class="orderinfocol">
+                        <el-row>
+                            <el-col :span="12" class="right-align">
+                                <span class="orderinfo">支付方案：</span>
+                            </el-col>
+                            <el-col :span="12" class="left-align">{{ Order.schemeName }}</el-col>
+                        </el-row>
+                    </el-col>
+                    <el-col :span="8" />
+                    <el-col :span="8" />
+                </el-row>
+            </el-card>
+            <el-card class="info" shadow="never">
+                <div slot="header" class="info-header">
+                    <svg-icon icon-class="dingdan_1" />
+                    <span type="primary" class="titlecss">学员信息</span>
+                </div>
+                <el-row class="orderinfoline">
+                    <el-col :span="8" class="orderinfocol">
+                        <el-row>
+                            <el-col :span="12" class="right-align">
+                                <span class="orderinfo">姓名：</span>
+                            </el-col>
+                            <el-col :span="12" class="left-align">{{ Order.userName }}</el-col>
+                        </el-row>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-row>
+                            <el-col :span="12" class="right-align">
+                                <span class="orderinfo">手机号：</span>
+                            </el-col>
+                            <el-col :span="12" class="left-align">{{ Order.orderNo }}</el-col>
+                        </el-row>
+                    </el-col>
+                    <el-col :span="8" />
+                </el-row>
+            </el-card>
+            <el-card class="info" shadow="never">
+                <div slot="header" class="info-header">
+                    <svg-icon icon-class="dingdan_1" />
+                    <span type="primary" class="titlecss">课程信息</span>
+                </div>
+                <el-row class="orderinfoline">
+                    <el-col :span="8">
+                        <el-row>
+                            <el-col :span="12" class="right-align">
+                                <span class="orderinfo">课程名称：</span>
+                            </el-col>
+                            <el-col :span="12" class="left-align">{{ Order.courseName }}</el-col>
+                        </el-row>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-row>
+                            <el-col :span="12" class="right-align">
+                                <span class="orderinfo">课程价格：</span>
+                            </el-col>
+                            <el-col :span="12" class="left-align">{{ Order.price / 100 }} 元</el-col>
+                        </el-row>
+                    </el-col>
+                </el-row>
+                <el-row class="orderinfoline">
+                    <el-col :span="8">
+                        <el-row>
+                            <el-col :span="12" class="right-align">
+                                <span class="orderinfo">课程周期：</span>
+                            </el-col>
+                            <el-col :span="12" class="left-align">{{ Order.duration }} 天</el-col>
+                        </el-row>
+                    </el-col>
+                    <el-col :span="8" />
+                </el-row>
+            </el-card>
+            <el-card class="info" shadow="never">
+                <div slot="header" class="info-header">
+                    <svg-icon icon-class="dingdan_1" />
+                    <span type="primary" class="titlecss">支付信息</span>
+                </div>
+                <el-row class="orderinfoline">
+                    <div class="content">
+                        <div class="table">
+                            <el-table v-loading="tableLoading" :data="paymentOrders" :fit="true" border
+                                highlight-current-row>
+                                <el-table-column prop="periods" label="期数" />
+                                <el-table-column prop="classAmount" label="学费">
+                                    <template slot-scope="scope">
+                                        <div class="table-opt">
+                                            {{ scope.row.classAmount / 100 }}
+                                        </div>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column prop="serviceAmount" label="服务费">
+                                    <template slot-scope="scope">
+                                        <div class="table-opt">
+                                            {{ scope.row.serviceAmount / 100 }}
+                                        </div>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column prop="paymentStatus" label="支付状态" >
+                                    <template slot-scope="scope">
+                                        <div class="table-opt">
+                                            <el-tag> {{ scope.row.paymentStatus===5?'已支付':'待支付' }}</el-tag>   
+                                        </div>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column prop="paymentTime" label="支付时间" />
+                            </el-table>
                         </div>
-                    </el-card>
-                </div>
-            </el-collapse-item>
-        </el-collapse>
-
-        <el-card>
-            <div class="tools">
-                <el-button-group>
-                    <el-button v-waves size="medium" icon="el-icon-refresh" @click="handleSearch('refresh')" />
-                </el-button-group>
-            </div>
-            <div class="content">
-                <div class="table">
-                    <el-table v-loading="tableLoading" :data="orderList" :fit="true" border highlight-current-row>
-                        <el-table-column prop="orderNo" label="订单号" />
-                        <el-table-column prop="courseName" label="课程名称" />
-                        <el-table-column prop="price" label="课程价格(元)">
-                            <template slot-scope="scope">
-                                <div class="table-opt">
-                                    {{ scope.row.price / 100 }}
-                                </div>
-                            </template>
-                        </el-table-column>
-                        <el-table-column prop="userName" label="客户名" />
-                        <el-table-column prop="schemeName" label="方案名称" />
-                        <el-table-column prop="status" label="状态">
-                            <template slot-scope="scope">
-                                <div class="table-opt">
-                                  <el-tag>{{ getStatusDescript(scope.row.status) }}</el-tag>   
-                                </div>
-                            </template>
-                        </el-table-column>
-                        <el-table-column label="操作" fixed="right">
-                            <template slot-scope="scope">
-                                <div class="table-opt">
-                                    <el-button size="mini" type="info" @click="goOrderDetail(scope.row)">详情</el-button>
-                                </div>
-                            </template>
-                        </el-table-column>
-                    </el-table>
-                    <div class="pagination">
-                        <el-pagination background layout="sizes,total, prev, pager, next, jumper" :total="totalCount"
-                            :page-sizes="[10, 20, 50, 100]" :page-size="pageSize" :current-page="pageIndex"
-                            @current-change="onPageChange" @size-change="handleSizeChange" />
                     </div>
-                </div>
-            </div>
-        </el-card>
+                </el-row>
+            </el-card>
+        </el-col>
     </div>
 </template>
-
+  
 <script>
 import {
-    QueryOrders
+    GetOrder,
+    GetPaymentOrders
 } from '@/api/order1'
-import waves from '@/directive/waves' // waves directive
-
+import moment from 'moment'
+import permission from '@/directive/permission'
+import {
+    mapGetters
+} from 'vuex'
 export default {
-    name: 'OrderDetail1',
+    filters: {
+        dateToStr(date) {
+            return moment(date).format('YYYY-MM-DD')
+        },
+        ellipsis(value) {
+            if (!value) return ''
+            if (value.length > 8) {
+                return value.slice(0, 8) + '...'
+            }
+            return value
+        }
+    },
     directives: {
-        waves
+        permission
     },
     data() {
         return {
-            // 数据
-            orderList: [],
-            tableLoading: false,
-
-            totalCount: 0,
-            pageSize: 10,
-            pageIndex: 1,
-
-            // 搜索表单
-            searchCondition: {
-                orderNo: ''
-            }
+            Order: {},
+            paymentOrders: []
         }
+    },
+    computed: {
+        ...mapGetters([
+            'sysUser'
+        ])
     },
     created() {
         this.init()
     },
     methods: {
         init() {
-            this.QueryOrders()
-        },
-        QueryOrders(param) {
-            this.tableLoading = true
-            param = {
-                ...param,
-                pageSize: this.pageSize,
-                pageIndex: this.pageIndex
+            if (this.getUrlParams()) {
+                this.fetchOrder()
             }
-            QueryOrders(param || {}).then(res => {
-                this.totalCount = res.data.total
-                this.orderList = res.data.rows
-                this.tableLoading = false
+        },
+
+        getUrlParams() {
+            const query = this.$route.params
+            if (!query || !query.orderNo) {
+                this.$alert('请返回重试', '订单查询失败', {
+                    confirmButtonText: '确定',
+                    type: 'error',
+                    callback: action => {
+                        this.$router.push({
+                            path: '/orderlist1'
+                        })
+                    }
+                })
+                return false
+            }
+            this.Order.orderNo = query.orderNo
+            return true
+        },
+        fetchOrder() {
+            const loading = this.$loading({
+                lock: true,
+                text: '正在加载订单',
+                spinner: 'el-icon-loading',
+                background: 'rgba(0, 0, 0, 0.7)'
+            })
+            GetOrder(this.Order.orderNo).then(res => {
+                const code = res.code
+                if (code !== 0) {
+                    this.$alert('请返回重试', '订单查询失败', {
+                        confirmButtonText: '确定',
+                        type: 'error',
+                        callback: action => {
+                            this.$router.push({
+                                path: '/orderlist1'
+                            })
+                        }
+                    })
+                    loading.close()
+                    return false
+                }
+                this.Order = res.data
+
+                this.fetchPaymentOrders();
+
+                loading.close()
             })
         },
-        handleSearch(type) {
-            let param = {}
-            if (type !== 'refresh') {
-                param = this.searchCondition
-            }
-            this.QueryOrders(param)
-
-            const tip = (type === 'refresh' ? '刷新' : '搜索') + '成功'
-            this.$message(tip)
-        },
-        handleReset(formName) {
-            this.$refs[formName].resetFields()
-        },
-        handleSizeChange(val) {
-            this.pageSize = val
-            this.pageIndex = 1
-        },
-        onPageChange(index) {
-            this.pageIndex = index
-        },
-        goOrderDetail(order){
-            this.$router.push({
-					path: `/orderdetail1/${order.orderNo}`
-				})
-        },
-        getStatusDescript(val) {
-            let status = '未知'
-            switch (val) {
-                case 0:
-                    status = '待支付'
-                    break; case 5:
-                    status = '部分支付'
-                    break;
-                case 10:
-                    status = '已完成'
-                    break;
-            }
-            return status;
+        fetchPaymentOrders() {
+            GetPaymentOrders(this.Order.orderNo, this.Order.openId)
+                .then(res => {
+                    this.paymentOrders = res.data
+                })
         }
     }
 }
 </script>
-
+  
 <style scoped>
-.dialog-footer {
+.info {
+    margin: 15px;
+}
+
+::v-deep .el-card__header {
+    padding: 0;
+    border-bottom: none;
+}
+
+.el-divider {
+    background-color: #ffffff;
+    margin: 0;
+}
+
+.info-header {
+    font-size: 20px;
+    line-height: 60px;
+    padding-left: 10px;
+    margin-left: 0;
+}
+
+.refund-header {
+    padding: 0.625rem;
+    padding-bottom: 0;
+}
+
+.refund-header .el-row {
+    font-size: small;
+    height: 2.5rem;
+}
+
+::v-deep .el-card__header {
+    padding: 0;
+    border-bottom: none;
+}
+
+.right-align {
+    font-size: 13px;
+    padding-right: 10px;
+    text-align: right;
+    line-height: 20px;
+}
+
+.left-align {
+    line-height: 20px;
+    float: left;
+    font-size: 13px;
+    color: #606266;
+    font-family: '微软雅黑';
+}
+
+::v-deep .el-card__body {
+    padding: 0 20px 0 20px;
+}
+
+.orderinfo {
+    font-weight: 600;
+    font-size: 13px;
+    color: #606266;
+    font-family: '微软雅黑';
+}
+
+.orderinfoline {
+    margin-bottom: 20px;
+    margin-top: 20px;
+    text-align: left;
+}
+
+.orderinfocol {
     text-align: center;
 }
 
-.pagination {
-    margin-top: 1rem;
+.opt {
+    float: right;
+}
+
+.order-setp {
+    margin-left: 3%;
+    margin-top: 1.5rem;
+}
+
+.el-link {
+    cursor: default;
+}
+
+.el-link.el-link--default:hover {
+    color: #606266;
+}
+
+.purchase-order-info {
+    line-height: 40px;
+}
+
+.ml5 {
+    margin-left: 5px;
+}
+
+.titlecss {
+    padding-left: 5px;
+    color: #006699;
+    opacity: 0.7;
+    filter: alpha(opacity=70);
+    font-weight: 600;
+}
+
+.www {
+    height: 10px;
+}
+
+::v-deep .el-table th>.cell {
+    color: #606266;
+    text-align: center;
+}
+
+::v-deep .el-table__body td {
+    text-align: center;
+}
+
+::v-deep .el-table th {
+    background: #ffffff;
+    opacity: 1;
+}
+
+.left-align {
+    font-size: 13px;
+}
+
+.text-right {
+    font-size: 13px;
+    text-align: right;
+}
+
+::v-deep .el-table th {
+    border-right: 0
+}
+
+::v-deep .el-table th.el-table__cell {
+    background-color: #fff;
 }
 </style>

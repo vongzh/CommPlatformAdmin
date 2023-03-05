@@ -11,7 +11,6 @@
       <app-main />
       <right-panel v-if="showSettings">
         <settings />
-        <TelService />
       </right-panel>
     </div>
   </div>
@@ -28,7 +27,6 @@ import {
 } from './components'
 
 import RightPanel from '@/components/RightPanel'
-import TelService from '@/components/TelService'
 import ResizeMixin from './mixin/ResizeHandler'
 import {
   mapState,
@@ -42,7 +40,6 @@ export default {
     AppMain,
     Navbar,
     RightPanel,
-    TelService,
     Settings,
     Sidebar,
     TagsView,

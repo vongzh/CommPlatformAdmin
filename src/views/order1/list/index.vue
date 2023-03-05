@@ -131,9 +131,13 @@ export default {
         handleSizeChange(val) {
             this.pageSize = val
             this.pageIndex = 1
+
+            this.QueryOrders(this.searchCondition)
         },
         onPageChange(index) {
             this.pageIndex = index
+            
+            this.QueryOrders(this.searchCondition)
         },
         goOrderDetail(order){
             this.$router.push({

@@ -17,3 +17,14 @@ export function GetOrder(orderNo) {
         }
     })
 }
+
+export function GetPaymentOrders(orderNo, openId ) {
+    return request({
+        url: '/Payment/GetPaymentOrders',
+        method: 'post',
+        params: {
+            orderNo,
+            openId
+        }
+    })
+}
