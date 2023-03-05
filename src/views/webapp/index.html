@@ -98,6 +98,9 @@
           height: calc(90vh);
         }
         
+        .weui-btn_primary{
+          background: #3A7FDE;
+        }
     </style>
 
   </head>
@@ -244,7 +247,7 @@
 
     var openid = '';
 
-    var appId = 'wx64583fc8eeb8d0ba';
+    var appId = 'wxfe05310a0c29024c';
 
     var code = getUrlCode().code;
 
@@ -257,7 +260,7 @@
     }else{
       axios({
         method: 'get',
-        url: 'http://120.79.132.254:8555/WeChat/GetOpenId?code='+code,
+        url: 'https://api.ruimaitop.com/WeChat/GetOpenId?code='+code,
       }).then(function(data){
         openid = data.data;
       }).catch(function(data){

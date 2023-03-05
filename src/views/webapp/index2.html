@@ -52,6 +52,10 @@
           border-radius: 5px;
         }
 
+        .weui-btn_primary{
+          background: #3A7FDE;
+        }
+
         .weui-cells{
           border-radius: 5px;
         }
@@ -190,6 +194,7 @@
             <div class="page-footer">
               <a href="javascript:;" role="button" class="weui-btn weui-btn_primary next-botton" id="submitBtn">提交</a>
             </div>
+          </div>
         </div>
     </div>
 
@@ -200,6 +205,7 @@
           <p class="weui-toast__content"></p>
       </div>
     </div>
+
     <div role="alert" id="successToast" style="display: none;">
       <div class="weui-mask_transparent"></div>
       <div class="weui-toast">
@@ -244,17 +250,17 @@
 
       $('#courseList').on('click', function () {
         var tempArry = [];
-        for (var i = 0; i < courseList.data.length; i++) {
-          tempArry.push({label:courseList.data[i].courseName,value:courseList.data[i].id,duration:courseList.data[i].duration,price:courseList.data[i].price});
+        for (var i = 0; i < courseList.length; i++) {
+          tempArry.push({label:courseList[i].courseName,value:courseList[i].id,duration:courseList[i].duration,price:courseList[i].price});
         }
         console.log(tempArry);
         weui.picker(tempArry, {
             defaultValue:[tempArry[0].value],
             onConfirm: function (result) {
                 console.log(result[0]);
-                for (let index = 0; index < courseList.data.length; index++) {
-                  if(result[0].value==courseList.data[index].id){
-                    currentCourse = courseList.data[index];
+                for (let index = 0; index < courseList.length; index++) {
+                  if(result[0].value==courseList[index].id){
+                    currentCourse = courseList[index];
                     break;
                   }                  
                 }
@@ -287,17 +293,17 @@
       $('#schemePicker').on('click',function(){
         var tempArray  = [];
 
-        for (let index = 0; index < schemeList.data.length; index++) {
-          tempArray.push({label:schemeList.data[index].schemeName,value:schemeList.data[index].id});
+        for (let index = 0; index < schemeList.length; index++) {
+          tempArray.push({label:schemeList[index].schemeName,value:schemeList[index].id});
         }
         weui.picker(tempArray, {
             defaultValue:[tempArray[0].value],
             onConfirm: function (result) {
               console.log(result[0]);
               $('#txtSchemeName').text(result[0].label);
-              for (let index = 0; index < schemeList.data.length; index++) {
-                if(result[0].value==schemeList.data[index].id){
-                  currentScheme = schemeList.data[index];
+              for (let index = 0; index < schemeList.length; index++) {
+                if(result[0].value==schemeList[index].id){
+                  currentScheme = schemeList[index];
                   break;
                 }                
               }
@@ -375,11 +381,6 @@
 
       $('#confrimBtn').on('click',function(){
 
-        if(isLock){
-          return;
-        }
-
-        isLock = true;
 
         var sessionSignup = window.sessionStorage.getItem('Signup');
 
@@ -433,9 +434,16 @@
           Signup:signup
         };
 
+        
+        if(isLock){
+          return;
+        }
+
+        isLock = true;
+
         axios({
           method: 'post',
-          url: 'http://120.79.132.254:8555/Order1/Create?OpenId='+signup.OpenId,
+          url: 'https://api.ruimaitop.com/Order1/Create?OpenId='+signup.OpenId,
           data:createOrderRequest,
         }).then(function(data){
           console.log(data);
@@ -446,6 +454,13 @@
             $('#successToast').fadeIn(100);
             setTimeout(function () {
               $('#successToast').fadeOut(100);
+              window.location.href = 'billDetail.html';
+            }, 1000);
+          }else{
+            $('#warnToast .weui-toast__content').text(data.data.message);
+            $('#warnToast').fadeIn(100);
+            setTimeout(function () {
+              $('#warnToast').fadeOut(100);
             }, 1000);
           }
         });
@@ -467,8 +482,8 @@
         var price = currentCourse.price/100;
         var datetime = new Date();
         $('#txtSchemeName').text(obj.schemeName);
-        $('#txtFirstPayPrice').text(Math.round(price/ obj.totalNumber));
-        $('#txtServerPrice').text(Math.round((price * obj.serviceRate)/100));
+        $('#txtFirstPayPrice').text((price/ obj.totalNumber).toFixed(2));
+        $('#txtServerPrice').text(((price * obj.serviceRate)/100).toFixed(2));
         var firstTime = datetime.setMonth(datetime.getMonth()+1);
         var tempFirstDate = new Date(firstTime).toLocaleDateString().replaceAll('/','-');
         $('#txtFirstPayDate').text(tempFirstDate);
@@ -483,36 +498,48 @@
     function loadCourse(){
         axios({
           method: 'post',
-          url: 'http://120.79.132.254:8555/Course/Query',
+          url: 'https://api.ruimaitop.com/Course/Query',
         }).then(function(data){
-          courseList = data.data;
+
+          if(data.data.data){
+            for (var i = 0; i < data.data.data.length; i++) {
+              if(data.data.data[i].isDelete==0){
+                courseList.push(data.data.data[i]);
+              }
+            }
+          }
         }).catch(function(data){
           console.log(data);
         }).finally(function(){
-          if(courseList.data){
-            if(courseList.data.length > 0 ){
-              currentCourse = courseList.data[0];
-              bindCourseElement(currentCourse);
-            }else{
-              $('#txtCourseName').text('请选择');
-              $('#txtCourseName').addClass('colorCCCCCC');
-            }
-            loadScheme();
+          if(courseList.length > 0 ){
+            currentCourse = courseList[0];
+            bindCourseElement(currentCourse);
+          }else{
+            $('#txtCourseName').text('请选择');
+            $('#txtCourseName').addClass('colorCCCCCC');
           }
+          loadScheme();
         });
     }
 
     function loadScheme(){
       axios({
         method: 'post',
-        url: 'http://120.79.132.254:8555/Scheme/Query',
+        url: 'https://api.ruimaitop.com/Scheme/Query',
       }).then(function(data){
-        schemeList = data.data;
+
+        if(data.data.data){
+          for (var i = 0; i < data.data.data.length; i++) {
+            if(data.data.data[i].isDelete==0){
+              schemeList.push(data.data.data[i]);
+            }
+          }
+        }
       }).catch(function(data){
         console.log(data);
       }).finally(function(){
-        if(schemeList.data.length > 0){
-          currentScheme = schemeList.data[0];
+        if(schemeList.length > 0){
+          currentScheme = schemeList[0];
           bindSchemeElement(currentScheme);
         }else{
           $('#txtSchemeName').text('请选择');

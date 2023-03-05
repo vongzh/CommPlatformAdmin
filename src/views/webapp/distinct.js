@@ -15028,7 +15028,6 @@ var educationArray = [{
     value: 2
   },{
     label: '大专',
-    disabled: true,
     value: 3
   }, {
     label: '本科',

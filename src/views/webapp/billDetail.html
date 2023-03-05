@@ -26,8 +26,8 @@
       .header{
         height: 200px;
         background-color: #5480E9;
-        border-bottom-left-radius: 30px;
-        border-bottom-right-radius: 30px;
+        border-bottom-left-radius: 20px;
+        border-bottom-right-radius: 20px;
       }
 
 
@@ -37,13 +37,15 @@
         border-bottom: 1px solid #ccc;
         padding-bottom: 10px;
         background: #ffffff;
-        margin-bottom: 20px;
+        margin-bottom: 15px;
       }
       .content-item-1{
         border-bottom: 1px solid #e3e3e3;
-        padding-bottom: 10px;
+        padding-bottom: 15px;
+        padding-top: 5px;
       }
       .content-item-2{
+        position: relative;
         padding: 10px 0px;
       }
 
@@ -69,6 +71,7 @@
 
       .page__bd_spacing{
         padding: 15px;
+        padding-bottom: 60px;
       }
 
       .fuhao{
@@ -86,9 +89,8 @@
       }
 
       .right-checkbox{
-        text-align: right;
         position: absolute;
-        right: 0px;
+        right: 0;
       }
 
       .btn1{
@@ -111,19 +113,19 @@
         color: #fff;
       }
 
+      .page{
+        height: 100%;
+        overflow: auto;
+      }
+
 
       .fd{
         position: absolute;
-        bottom: 0px;
+        bottom: 0;
         margin-bottom: 15px;
         width: 100%;
         left: 0;
       }
-
-      .page{
-        position: relative;
-      }
-
       .youhui{
         font-size: 10px;
         background: #3A80E1;
@@ -155,81 +157,331 @@
         opacity: 0.6;
       }
 
+      .weui-icon-checked{
+        color:#5480E9 !important;
+      }
+
+      .weui-cells_checkbox{
+        padding-right: 0px;
+      }
+
+      .font14{
+        font-size: 14px;
+      }
+      .font16{
+        font-size: 16px;
+      }
+      .mleft5{
+        margin-left: 5px;
+      }
 
     </style>
 
   </head>
-  <body>
+  <body id="app">
 
 
     <div class="page">
       <div class="weui-form">
         <div class="page__hd">
           <div class="header">
-              <p class="p1">剩余支付金额（元）</p>
-              <p class="p2">￥566.44</p>
+              <p class="p1 font16">剩余支付金额(元)</p>
+              <p class="p2">
+                <span class="font14">￥</span>
+                <span v-html="noPayAmount"></span>
+              </p>
               <div class="p3">请最晚在支付日当天中午12点前主动支付</div>
           </div>
         </div>
         <div class="page__bd page__bd_spacing">
-          <div class="content-item">
-            <div class="weui-flex content-item-1">
-                <div class="placeholder"><span class="btn">1/15期</span></div>
-                <div class="weui-flex__item">
-                  <div class="placeholder pay-time">
-                      应付时间：2023-03-29 23:59:59
-                  </div>
-                </div>
-            </div>
 
+          <div class="content-item" v-for="(item,index) in billData">
+            <div class="weui-flex content-item-1">
+              <div class="placeholder">
+                <span class="btn">
+                  <span v-html="item.periods">
+                  </span>
+                  /
+                  <span v-html="billData.length">
+                  </span>
+                  期
+                </span>
+              </div>
+              <div class="weui-flex__item">
+                <div class="placeholder pay-time">
+                    应付时间：<span v-html="item.payableTime"></span>
+                </div>
+              </div>
+            </div>
             <div class="weui-flex content-item-2">
               <div class="weui-flex__item">
                 <span class="fuhao">￥</span>
-                <span class="price">375.25</span>
-                
+                <span class="price" v-html="item.totalAmount/100"></span>
                 <p class="service-price">
-                  <span>学费：350.00</span>
-                  <span>服务费：2625</span>
+                  学费:<span v-html="item.classAmount/100"></span>
+                  服务费:<span class="mleft5" v-html="item.serviceAmount/100"></span>
                 </p>
-
               </div>
               <div class="weui-flex__item">
-
-                <label class="weui-cell weui-cells_checkbox weui-cell_active weui-check__label right-checkbox" for="s12">
+                <label class="weui-cell weui-cells_checkbox weui-cell_active weui-check__label right-checkbox" :for='getStr(index)'>
                   <div class="weui-cell__hd">
-                      <input type="checkbox" name="checkbox1" class="weui-check" id="s12"/>
+                      <input type="checkbox" name="checkbox" class="weui-check" :id="getStr(index)"/>
                       <i class="weui-icon-checked"></i>
                   </div>
                 </label>
-
               </div>
             </div>
           </div>
+        </div>
+      </div>
+      
+      <div class="weui-flex fd">
+        <div class="weui-flex__item btn1" @click="payAll()">
+          <span>一次性付清</span>
+          <span class="youhui">优惠</span>
+        </div>
+        <div class="weui-flex__item btn2" @click="PaySelected()">
+          支付所选
+        </div>
+      </div>
 
-          <div class="weui-flex fd">
+    </div>
 
-            <div class="weui-flex__item btn1">
-              <span>一次性付清</span>
-              <span class="youhui">优惠</span>
-            </div>
-
-            <div class="weui-flex__item btn2">
-              支付所选
-            </div>
-            
-          </div>
+    <div role="alert" id="warnToast" style="display: none;">
+      <div class="weui-mask_transparent"></div>
+      <div class="weui-toast">
+          <i class="weui-icon-warn weui-icon_toast"></i>
+          <p class="weui-toast__content"></p>
       </div>
     </div>
+
+    <div role="alert" id="successToast" style="display: none;">
+      <div class="weui-mask_transparent"></div>
+      <div class="weui-toast">
+          <i class="weui-icon-success-no-circle weui-icon_toast"></i>
+          <p class="weui-toast__content"></p>
+      </div>
+    </div>
+
     
   </body>
 
-  
-  <!-- <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.3/jquery.min.js"></script> -->
+  <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
   <script src="https://cdn.bootcdn.net/ajax/libs/axios/1.3.2/axios.min.js"></script>
-  <script src="https://cdn.bootcdn.net/ajax/libs/vue/3.2.47/vue.cjs.js"></script>
+  <script src="https://cdn.bootcdn.net/ajax/libs/vue/3.2.47/vue.global.min.js"></script>
+  <script src="https://res2.wx.qq.com/open/js/jweixin-1.6.0.js"></script>
+  
 
   <script>
 
+  const { createApp } = Vue
+
+  const app = createApp({
+    data() {
+      return {
+        openId:'',
+        billData:[],
+        prepayId:'',
+        wxpayconfig:null,
+        noPayAmount:0,
+      }
+    },
+    methods:{
+      init:function(){
+        console.log('init');
+        var _this = this;
+        var appId = 'wxfe05310a0c29024c';
+        var code = this.getCode().code;
+        var local = window.location.href;
+        if(!code){
+          var url = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid='+appId+'&redirect_uri='+local+'&response_type=code&scope=snsapi_base&m=oauth2#wechat_redirect';
+          window.location.href = url;
+        }else{
+          axios({
+            method: 'get',
+            url: 'https://api.ruimaitop.com/WeChat/GetOpenId?code='+code,
+          }).then(function(data){
+            _this.openId = data.data;
+            _this.loadData();
+          }).catch(function(data){
+            console.log('获取openid失败');
+          });
+        }
+        _this.payConfig();
+      },
+
+      payConfig:function(){
+        axios.get('https://api.ruimaitop.com/wechat/JsSdk')
+          .then(function(response){
+            wx.config({
+              debug: false, 
+              appId: response.data.appId, 
+              timestamp: response.data.timestamp, // 必填，生成签名的时间戳
+              nonceStr: response.data.nonceStr, // 必填，生成签名的随机串
+              signature: response.data.signature,// 必填，签名
+              jsApiList: [
+                "onMenuShareTimeline",
+                "onMenuShareAppMessage",
+                "onMenuShareQQ",
+                "onMenuShareWeibo",
+                "startRecord",
+                "stopRecord",
+                "onVoiceRecordEnd",
+                "playVoice",
+                "pauseVoice",
+                "stopVoice",
+                "onVoicePlayEnd",
+                "uploadVoice",
+                "downloadVoice",
+                "chooseImage",
+                "previewImage",
+                "uploadImage",
+                "downloadImage",
+                "translateVoice",
+                "getNetworkType",
+                "openLocation",
+                "getLocation",
+                "hideOptionMenu",
+                "showOptionMenu",
+                "hideMenuItems",
+                "showMenuItems",
+                "hideAllNonBaseMenuItem",
+                "showAllNonBaseMenuItem",
+                "closeWindow",
+                "scanQRCode",
+                "chooseWXPay",
+                "openProductSpecificView",
+                "addCard",
+                "chooseCard",
+                "openCard"] 
+            });
+          })
+          .catch(function(error){
+            console.log(error);
+          })
+          .finally(function(){
+            console.log('finally');
+          })
+      },
+
+      payAll:function(){
+        //一次性付清
+
+        var _this = this;
+
+        var paymentNos = [];
+
+        for (let i = 0; i < _this.billData.length; i++) {
+          paymentNos.push(parseFloat(_this.billData[i].paymentNo));
+        }
+
+        if(paymentNos.length==0){
+          $('.weui-toast__content').text('没有可支付订单');
+          $('#warnToast').fadeIn(100);
+          setTimeout(function () {
+              $('#warnToast').fadeOut(100);
+          }, 1000);
+          return;
+        }
+
+        axios({
+          method: 'post',
+          url: 'https://api.ruimaitop.com/Payment/pay?&openid='+ this.openId,
+          data:paymentNos
+        }).then(function(data){
+          console.log(data);
+          var resp = data.data;
+          if(resp.result){
+            _this.wxpayconfig = resp.data;
+            if (typeof WeixinJSBridge == "undefined") {
+              if (document.addEventListener) {
+                  document.addEventListener('WeixinJSBridgeReady', _this.onBridgeReady(), false);
+              } else if (document.attachEvent) {
+                  document.attachEvent('WeixinJSBridgeReady', _this.onBridgeReady());
+                  document.attachEvent('onWeixinJSBridgeReady', _this.onBridgeReady());
+              }
+            }else{
+              _this.onBridgeReady();
+            }
+          }
+        }).catch(function(data){
+          console.log(data);
+        });
+      },
+
+      onBridgeReady:function(){
+        var _this = this;
+        WeixinJSBridge.invoke('getBrandWCPayRequest', {
+            "appId": _this.wxpayconfig.appId,     //公众号ID，由商户传入     
+            "timeStamp": _this.wxpayconfig.timeStamp,     //时间戳，自1970年以来的秒数     
+            "nonceStr": _this.wxpayconfig.nonceStr,      //随机串     
+            "package": _this.wxpayconfig.package,
+            "signType": _this.wxpayconfig.signType,     //微信签名方式：     
+            "paySign": _this.wxpayconfig.paySign //微信签名 
+          },
+          function(res) {
+            if (res.err_msg == "get_brand_wcpay_request:ok") {
+              // 使用以上方式判断前端返回,微信团队郑重提示：
+              //res.err_msg将在用户支付成功后返回ok，但并不保证它绝对可靠。
+              $('#successToast .weui-toast__content').text('支付成功');
+              $('#successToast').fadeIn(100);
+              setTimeout(function () {
+                $('#successToast').fadeOut(100);
+                _this.loadData();
+              }, 1000);
+            }
+          });
+      },
+
+      PaySelected:function(){
+
+        //支付所选
+
+      },
+
+      getCode:function(){
+        var url = location.search
+        this.winUrl = url
+        var theRequest = new Object()
+        if (url.indexOf("?") != -1) {
+          var str = url.substr(1)
+          var strs = str.split("&")
+          for (var i = 0; i < strs.length; i++) {
+            theRequest[strs[i].split("=")[0]] = (strs[i].split("=")[1])
+          }
+        }
+        return theRequest;
+      },
+      getStr:function(index){
+        return 'ck'+ index;
+      },
+      loadData:function(){
+        var _this = this;
+        if(!_this.openId){
+          return;
+        }
+        axios({
+          method: 'post',
+          url: 'https://api.ruimaitop.com/Payment/GetPaymentOrders?orderNo=&openid='+ _this.openId,
+        }).then(function(data){
+           _this.billData = data.data.data;
+
+           for (var i = 0; i < _this.billData.length; i++) {
+            _this.noPayAmount+=_this.billData[i].totalAmount;
+           }
+
+           _this.noPayAmount = (_this.noPayAmount / 100).toFixed(2);
+        }).catch(function(data){
+          console.log(data);
+        });
+      }
+    }
+  }).mount('#app')
+
+
+
+
+  app.init();
     
   </script>
 
