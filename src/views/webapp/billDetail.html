@@ -175,6 +175,17 @@
         margin-left: 5px;
       }
 
+      .isPay{
+        opacity: 0.6;
+        pointer-events: none;
+      }
+
+      .payed{
+        font-size: 14px;
+        color: #5480E9;
+        margin-left: 5px;
+        font-weight: bold;
+      }
     </style>
 
   </head>
@@ -195,7 +206,7 @@
         </div>
         <div class="page__bd page__bd_spacing">
 
-          <div class="content-item" v-for="(item,index) in billData">
+          <div class="content-item" :class="{'isPay':item.tempPayStatus}" v-for="(item,index) in billData">
             <div class="weui-flex content-item-1">
               <div class="placeholder">
                 <span class="btn">
@@ -206,6 +217,7 @@
                   </span>
                   期
                 </span>
+                <span class="payed" v-show="item.tempPayStatus">已支付</span>
               </div>
               <div class="weui-flex__item">
                 <div class="placeholder pay-time">
@@ -225,7 +237,7 @@
               <div class="weui-flex__item">
                 <label class="weui-cell weui-cells_checkbox weui-cell_active weui-check__label right-checkbox" :for='getStr(index)'>
                   <div class="weui-cell__hd">
-                      <input type="checkbox" name="checkbox" class="weui-check" :id="getStr(index)"/>
+                      <input type="checkbox" v-model="item.paymentStatus" v-bind:true-value="5" v-bind::false-value="0" name="checkbox" class="weui-check" :id="getStr(index)"/>
                       <i class="weui-icon-checked"></i>
                   </div>
                 </label>
@@ -241,7 +253,7 @@
           <span class="youhui">优惠</span>
         </div>
         <div class="weui-flex__item btn2" @click="PaySelected()">
-          支付所选
+          去支付所选
         </div>
       </div>
 
@@ -260,6 +272,16 @@
       <div class="weui-toast">
           <i class="weui-icon-success-no-circle weui-icon_toast"></i>
           <p class="weui-toast__content"></p>
+      </div>
+    </div>
+
+    <div role="alert" id="loadingToast" style="display: none;">
+      <div class="weui-mask_transparent"></div>
+      <div class="weui-toast">
+          <span class="weui-primary-loading weui-icon_toast">
+            <span class="weui-primary-loading__dot"></span>
+          </span>
+          <p class="weui-toast__content">正在加载...</p>
       </div>
     </div>
 
@@ -301,10 +323,14 @@
             method: 'get',
             url: 'https://api.ruimaitop.com/WeChat/GetOpenId?code='+code,
           }).then(function(data){
+            if(data.data.result==false){
+              window.location.href = '/billDetail.html';
+              return;
+            }
             _this.openId = data.data;
             _this.loadData();
           }).catch(function(data){
-            console.log('获取openid失败');
+            alert('获取openid失败');
           });
         }
         _this.payConfig();
@@ -368,21 +394,24 @@
         //一次性付清
 
         var _this = this;
-
         var paymentNos = [];
-
         for (let i = 0; i < _this.billData.length; i++) {
-          paymentNos.push(parseFloat(_this.billData[i].paymentNo));
+          if(_this.billData[i].paymentStatus==0){
+            paymentNos.push(parseFloat(_this.billData[i].paymentNo));
+          }
         }
 
         if(paymentNos.length==0){
-          $('.weui-toast__content').text('没有可支付订单');
+          $('#warnToast .weui-toast__content').text('已全部支付');
           $('#warnToast').fadeIn(100);
           setTimeout(function () {
               $('#warnToast').fadeOut(100);
+          $('#warnToast .weui-toast__content').text('');
           }, 1000);
           return;
         }
+
+        $('#loadingToast').fadeIn(100);
 
         axios({
           method: 'post',
@@ -390,6 +419,7 @@
           data:paymentNos
         }).then(function(data){
           console.log(data);
+          $('#loadingToast').fadeOut(100);
           var resp = data.data;
           if(resp.result){
             _this.wxpayconfig = resp.data;
@@ -405,7 +435,13 @@
             }
           }
         }).catch(function(data){
-          console.log(data);
+          $('#loadingToast').fadeOut(100);
+          $('#warnToast .weui-toast__content').text('操作频繁..');
+          $('#warnToast').fadeIn(100);
+          setTimeout(function () {
+              $('#warnToast').fadeOut(100);
+              $('#warnToast .weui-toast__content').text('');
+          }, 1000);
         });
       },
 
@@ -436,6 +472,83 @@
       PaySelected:function(){
 
         //支付所选
+        var _this = this;
+
+        var paymentNos = [];
+        var number = 0;
+
+        for (var i = 0; i < _this.billData.length; i++) {
+          if(_this.billData[i].tempPayStatus){
+            number++;
+            continue;
+          }
+          if(_this.billData[i].paymentStatus==5){
+            paymentNos.push(_this.billData[i].paymentNo);
+          }
+        }
+
+        //检查是否选中
+
+        if(number==_this.billData.length){
+          $('#warnToast .weui-toast__content').text('已全部支付');
+          $('#warnToast').fadeIn(100);
+          setTimeout(function () {
+              $('#warnToast').fadeOut(100);
+              $('#warnToast .weui-toast__content').text('');
+          }, 1000);
+          return;
+        }
+
+        if(paymentNos.length==0){
+          $('#warnToast .weui-toast__content').text('请先选择账单期数');
+          $('#warnToast').fadeIn(100);
+          setTimeout(function () {
+              $('#warnToast').fadeOut(100);
+              $('#warnToast .weui-toast__content').text('');
+          }, 1000);
+          return;
+        }
+
+
+        //开始唤起支付
+        $('#loadingToast').fadeIn(100);
+        axios({
+          method: 'post',
+          url: 'https://api.ruimaitop.com/Payment/pay?&openid='+ this.openId,
+          data:paymentNos
+        }).then(function(data){
+          console.log(data);
+          $('#loadingToast').fadeOut(100);
+          var resp = data.data;
+          if(resp.result){
+            _this.wxpayconfig = resp.data;
+            if (typeof WeixinJSBridge == "undefined") {
+              if (document.addEventListener) {
+                  document.addEventListener('WeixinJSBridgeReady', _this.onBridgeReady(), false);
+              } else if (document.attachEvent) {
+                  document.attachEvent('WeixinJSBridgeReady', _this.onBridgeReady());
+                  document.attachEvent('onWeixinJSBridgeReady', _this.onBridgeReady());
+              }
+            }else{
+              _this.onBridgeReady();
+            }
+          }else{
+            $('#warnToast .weui-toast__content').text(resp.message);
+            $('#warnToast').fadeIn(100);
+            setTimeout(function () {
+                $('#warnToast').fadeOut(100);
+                $('#warnToast .weui-toast__content').text('');
+            }, 1000);
+          }
+        }).catch(function(data){
+          $('#loadingToast').fadeOut(100);
+          $('#warnToast .weui-toast__content').text('操作频繁..');
+          $('#warnToast').fadeIn(100);
+          setTimeout(function () {
+              $('#warnToast').fadeOut(100);
+          }, 1000);
+        });
+
 
       },
 
@@ -460,17 +573,22 @@
         if(!_this.openId){
           return;
         }
+        _this.noPayAmount = 0;
         axios({
           method: 'post',
           url: 'https://api.ruimaitop.com/Payment/GetPaymentOrders?orderNo=&openid='+ _this.openId,
         }).then(function(data){
            _this.billData = data.data.data;
-
            for (var i = 0; i < _this.billData.length; i++) {
-            _this.noPayAmount+=_this.billData[i].totalAmount;
+              if(_this.billData[i].paymentStatus==0){
+                _this.noPayAmount+=_this.billData[i].totalAmount;
+                _this.billData[i].tempPayStatus = false;
+              }else{
+                _this.billData[i].tempPayStatus = true;
+              }
            }
-
            _this.noPayAmount = (_this.noPayAmount / 100).toFixed(2);
+           
         }).catch(function(data){
           console.log(data);
         });
